@@ -42,6 +42,7 @@ class Clipper4coot < Formula
         "--enable-float",
         "--disable-static",
       ]
+      args << "--build=arm-apple-#{OS.kernel_name.downcase}#{OS.kernel_version.major}" if Hardware::CPU.arm? && OS.mac?
       simd_args = []
       simd_args << "--enable-sse2" << "--enable-avx" if Hardware::CPU.intel?
       system "./configure", *(args + simd_args)
