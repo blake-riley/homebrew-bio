@@ -12,6 +12,7 @@ class Coot < Formula
     depends_on "autoconf" => :build
     depends_on "automake" => :build
     depends_on "libtool" => :build
+    patch :DATA
   end
 
   depends_on "swig" => :build
@@ -139,3 +140,24 @@ class Coot < Formula
     assert_match "-I#{include}", shell_output("pkg-config --cflags mmdb2")
   end
 end
+
+__END__
+
+diff --git a/utils/backward.hpp b/utils/backward.hpp
+index 195ca8f2d..e661ce7b6 100644
+--- a/utils/backward.hpp
++++ b/utils/backward.hpp
+@@ -4157,7 +4157,11 @@ public:
+ #elif defined(__arm__)
+     error_addr = reinterpret_cast<void *>(uctx->uc_mcontext.arm_pc);
+ #elif defined(__aarch64__)
+-    error_addr = reinterpret_cast<void *>(uctx->uc_mcontext.pc);
++    #if defined(__APPLE__)
++      error_addr = reinterpret_cast<void *>(uctx->uc_mcontext->__ss.__pc);
++    #else
++      error_addr = reinterpret_cast<void *>(uctx->uc_mcontext.pc);
++    #endif
+ #elif defined(__mips__)
+     error_addr = reinterpret_cast<void *>(
+         reinterpret_cast<struct sigcontext *>(&uctx->uc_mcontext)->sc_pc);
+
