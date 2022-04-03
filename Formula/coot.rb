@@ -3,12 +3,12 @@ class Coot < Formula
 
   desc "Crystallographic Object-Oriented Toolkit"
   homepage "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/"
-  url "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/source/releases/coot-0.9.7.tar.gz"
-  sha256 "f9a612c859ea942c9309d7ebad63b4dffbd3b7ef351e1d007b64cf264317dd28"
+  url "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/source/releases/coot-1.tar.gz"
+  sha256 "abf7c70651c329ce1db69c7a026bb431af419c8861282cce817dd06eeeb3af99"
   license any_of: ["GPL-3.0-only", "LGPL-3.0-only", "GPL-2.0-or-later"]
 
   head do
-    url "https://github.com/pemsley/coot.git", branch: "refinement"
+    url "https://github.com/pemsley/coot.git", branch: "gtk3"
     depends_on "autoconf" => :build
     depends_on "automake" => :build
     depends_on "libtool" => :build
@@ -16,10 +16,9 @@ class Coot < Formula
 
   depends_on "swig" => :build
   depends_on "wget" => :build
-  depends_on xcode: :build
   depends_on "adwaita-icon-theme" # display icons
-  depends_on "boost@1.74"
-  depends_on "boost-python3@1.74"
+  depends_on "boost"
+  depends_on "boost-python3"
   depends_on "brewsci/bio/clipper4coot"
   depends_on "brewsci/bio/libccp4"
   depends_on "brewsci/bio/mmdb2"
@@ -43,7 +42,6 @@ class Coot < Formula
   depends_on "python@3.9"
   depends_on "rdkit"
   depends_on "readline"
-  # depends_on "qed"
 
   uses_from_macos "curl"
 
@@ -76,15 +74,14 @@ class Coot < Formula
     ENV.append "CPPFLAGS", "-I#{Formula["clipper4coot"].opt_prefix}/fftw2/include"
 
     # Boost root
-    boost_prefix = Formula["boost@1.74"].opt_prefix
-    boost_python_lib = Formula["boost-python3@1.74"].opt_lib
+    boost_prefix = Formula["boost"].opt_prefix
+    boost_python_lib = Formula["boost-python3"].opt_lib
 
     # set RDKit CPPFLAGS (required)
     ENV.append "CPPFLAGS", "-I#{Formula["rdkit"].opt_include}/rdkit"
 
     # '--with-enhanced-ligand-tools' is not included now due to a compilation failure on lbg.cc
     args = %W[
-      SHELL=/bin/bash
       --prefix=#{prefix}
       --with-boost=#{boost_prefix}
       --with-boost-libdir=#{boost_python_lib}
