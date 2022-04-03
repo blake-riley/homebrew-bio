@@ -126,7 +126,7 @@ class Coot < Formula
     end
     system "./configure", *args
     system "make"
-    system "make", "install"
+    ENV.deparallelize { system "make", "install" }
 
     # install reference data
     # install data, #{pkgshare} is /path/to/share/coot
