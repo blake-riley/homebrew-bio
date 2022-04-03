@@ -32,7 +32,7 @@ class Raster3d < Formula
 
     # Need SDKROOT for macOS
     ENV["SDKROOT"] = MacOS.sdk_path if OS.mac?
-    # ENV.depearallelize is required for compilation of 'make render'
+    # ENV.deparallelize is required for compilation of 'make render'
     ENV.deparallelize { system "make all && make install" }
     cp_r "examples", prefix
   end
