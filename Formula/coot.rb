@@ -161,3 +161,30 @@ index 195ca8f2d..e661ce7b6 100644
      error_addr = reinterpret_cast<void *>(
          reinterpret_cast<struct sigcontext *>(&uctx->uc_mcontext)->sc_pc);
 
+
+diff --git a/src/coot.in b/src/coot.in
+index 3b5ef61a0..3db17ea38 100755
+--- a/src/coot.in
++++ b/src/coot.in
+@@ -39,13 +39,15 @@ function check_for_no_graphics {
+ current_exe_dir=$(dirname $0)
+ systype=$(uname)
+ 
+-if [ $systype = Darwin ] ; then
+-    COOT_PREFIX="$(cd "$(dirname "$current_exe_dir")" 2>/dev/null && pwd)"
+-else
+-    unlinked_exe=$(readlink -f $0)
+-    unlinked_exe_dir=$(dirname $unlinked_exe)
+-    COOT_PREFIX=$(dirname $unlinked_exe_dir)
+-fi
++# ht: https://stackoverflow.com/a/246128
++SOURCE=${BASH_SOURCE[0]}
++while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
++  DIR=$(cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd)
++  SOURCE=$(readlink "$SOURCE")
++  [[ $SOURCE != /* ]] && SOURCE=$DIR/$SOURCE # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
++done
++COOT_BIN_PREFIX=$(cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd)
++COOT_PREFIX=$(dirname $COOT_BIN_PREFIX)
+ # echo COOT_PREFIX is $COOT_PREFIX
+ 
