@@ -1,49 +1,70 @@
 class Edirect < Formula
   desc "Access NCBI databases via the command-line"
   homepage "https://www.ncbi.nlm.nih.gov/books/NBK179288/"
-  url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/13.8.20200827/edirect-13.8.20200827.tar.gz"
-  version "13.8"
-  sha256 "2f9f7441af1bae0c39a5c09567dc46ebe60bb8bad0e399a196284038633dc735"
+  url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/16.2.20211103/edirect.tar.gz"
+  version "16.2"
+  sha256 "db1e75b4ecbb9dac6fbee905830f7d8f22b9769878e7fcef1b48ff2bfc484d13"
 
   bottle do
-    root_url "https://archive.org/download/brewsci/bottles-bio"
-    sha256 cellar: :any, catalina:     "d24f466c08c865c1866212c03969c0597512ede63f0193e1dd1fef31f8e6de16"
-    sha256 cellar: :any, x86_64_linux: "ef5637b3c12ad99ef415c38c441f00537b0bea6bffb615253cc3ca477d0b741d"
+    root_url "https://ghcr.io/v2/brewsci/bio"
+    sha256 cellar: :any,                 catalina:     "c10386ded062448752f32a7271153dfa541061d5ac7f87e0bf50565eaf222794"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "54bb73c126bd6d1094f3b4a26804db44d83ad3afe56f01079b63bba07cee1960"
   end
 
   depends_on "cpanminus" => :build
-  depends_on "openssl@1.1"
+  depends_on "openssl"
 
   uses_from_macos "perl"
   uses_from_macos "zlib"
 
+  # macOS CIRCLE-CI often fails on https accesses. Use ftp accesses.
   resource "xtract" do
-    if OS.mac?
-      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/13.8.20200827/xtract.Darwin"
-      sha256 "349f209aa4f77173959a562ea55f32d957bc57f1b2b3fdf7eeca03b88d42ab66"
+    if OS.mac? && Hardware::CPU.arm?
+      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/16.2.20211103/xtract.Silicon.gz"
+      sha256 "bf688a60d71436ebdb89b5c379fbc846c0db6248eaa71a09beaf8c9cce799358"
+    elsif OS.mac?
+      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/16.2.20211103/xtract.Darwin.gz"
+      sha256 "bdef978e624a5e7be9bf8f750cfd71b13c78f3bfe0a1fbb68a0b12364e34e35e"
     else
-      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/13.8.20200827/xtract.Linux"
-      sha256 "9a53c7f07104194d8328cdf711de6150ae0e4de89d6895dac3b61be083b9bfcc"
+      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/16.2.20211103/xtract.Linux.gz"
+      sha256 "edb1ec540a071d67f0253e7ecb327c39d58385c07f5b1a2817735a52315280f0"
     end
   end
 
   resource "rchive" do
-    if OS.mac?
-      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/13.8.20200827/rchive.Darwin"
-      sha256 "0d9123cacd04737f0389e1a47cd89662df113eaaf41261d5212b8430ce4308c8"
+    if OS.mac? && Hardware::CPU.arm?
+      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/16.2.20211103/rchive.Silicon.gz"
+      sha256 "26d409abc54546b303fd0b36bd3acb105504ac5dc1029bd3a3e2b2bf9e2b6f55"
+    elsif OS.mac?
+      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/16.2.20211103/rchive.Darwin.gz"
+      sha256 "45cf159995a026cd65e0a996110a81f76bfa4a84ef507e51fd22a9baf43bd4fd"
     else
-      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/13.8.20200827/rchive.Linux"
-      sha256 "9ec04876460db44a82840186f983d017b464eeafc013da7c5e21c39c35df3701"
+      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/16.2.20211103/rchive.Linux.gz"
+      sha256 "511b8f1150943541d634cb79cc9de78be1fe741a79d10b4d1ebb1fc6ed1d1a29"
+    end
+  end
+
+  resource "transmute" do
+    if OS.mac? && Hardware::CPU.arm?
+      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/16.2.20211103/transmute.Silicon.gz"
+      sha256 "1d7b2f061cd75eab3087b8d4bb2fb024bd68676563884e9df6fcec4ed221f5e5"
+    elsif OS.mac?
+      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/16.2.20211103/transmute.Darwin.gz"
+      sha256 "2a6bda5215e6eecde22b9006bd04687941e0ff35eaa8a25bacb859a072b901a8"
+    else
+      url "https://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/versions/16.2.20211103/transmute.Linux.gz"
+      sha256 "8bb83618bb38574745cf0e34d3ed2576ce0219ccd8e9d1f855a75b3ec71b57f1"
     end
   end
 
   def install
-    rm %w[Mozilla-CA.tar.gz setup-deps.pl]
+    rm %w[Mozilla-CA.tar.gz]
     rm Dir["*.go"]
+    libexec.install "ecommon.sh"
     rm Dir["*.sh"]
     rm Dir["pm-*"]
 
-    %w[rchive xtract].each do |tool|
+    %w[rchive xtract transmute].each do |tool|
       inreplace tool, "PATH=", "PATH=#{bin}:"
       inreplace tool, "compiled=$0", "compiled=#{bin}/#{tool}"
     end

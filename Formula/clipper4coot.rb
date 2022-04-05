@@ -1,25 +1,23 @@
 class Clipper4coot < Formula
   desc "Crystallographic automation and complex data manipulation libraries"
-  homepage "https://www2.mrc-lmb.cam.ac.uk/"
+  homepage "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/dependencies"
   url "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/dependencies/clipper-2.1.20180802.tar.gz"
   sha256 "7c7774f224b59458e0faa104d209da906c129523fa737e81eb3b99ec772b81e0"
   license "LGPL-2.1-only"
-  revision 1
+  revision 2
 
   bottle do
-    root_url "https://archive.org/download/brewsci/bottles-bio"
-    sha256 cellar: :any,                 catalina:     "b59b536495ee9b1691296458c4f0125c68c76de5e729738430621504492e1896"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "ce93bf961cd711153db05d726dbc9a0662c1e2d0d7af075ec99bb95015f71f43"
+    root_url "https://ghcr.io/v2/brewsci/bio"
+    sha256 cellar: :any,                 catalina:     "59a95fd391ef958374698000125b2bea0577ceb2d99f6af9f6f1f3ea05ae4a68"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "45f6f41305ce655b0e8517b2fb03e180f03c9f85d5553317f1b0b0eea6fbf8fc"
   end
 
-  depends_on "binutils" => :build
   depends_on "pkg-config" => [:build, :test]
   depends_on "brewsci/bio/libccp4"
   depends_on "brewsci/bio/mmdb2"
-  depends_on "glib"
 
   resource "libfftw2" do
-    url "http://www.fftw.org/fftw-2.1.5.tar.gz"
+    url "https://fftw.org/fftw-2.1.5.tar.gz"
     sha256 "f8057fae1c7df8b99116783ef3e94a6a44518d49c72e2e630c24b689c6022630"
   end
 
@@ -42,9 +40,13 @@ class Clipper4coot < Formula
         "--enable-float",
         "--disable-static",
       ]
-      simd_args = []
-      simd_args << "--enable-sse2" << "--enable-avx" if Hardware::CPU.intel?
-      system "./configure", *(args + simd_args)
+      # Hack for M1 Mac (https://github.com/pemsley/coot/issues/33#issuecomment-1086907650)
+      if Hardware::CPU.arm? && OS.mac?
+        args << "--build=arm-apple-#{OS.kernel_name.downcase}#{OS.kernel_version.major}"
+      end
+      # Avoid -flat_namespace usage on macOS
+      inreplace "./configure", "-flat_namespace -undefined suppress", "-undefined dynamic_lookup" if OS.mac?
+      system "./configure", *args
       system "make", "install"
     end
 

@@ -2,14 +2,14 @@ class Kalign < Formula
   # cite Lassmann_2019: "https://doi.org/10.1093/bioinformatics/btz795"
   desc "SIMD accelerated multiple sequence alignment"
   homepage "https://github.com/TimoLassmann/kalign"
-  url "https://github.com/TimoLassmann/kalign/archive/v3.3.tar.gz"
-  sha256 "bb49b531ad320881154976194acb8cc0c519715b0d422eac7a171cc246f88d59"
+  url "https://github.com/TimoLassmann/kalign/archive/v3.3.2.tar.gz"
+  sha256 "c0b357feda32e16041cf286a4e67626a52bbf78c39e2237b485d54fb38ef319a"
   license "GPL-3.0"
 
   bottle do
-    root_url "https://archive.org/download/brewsci/bottles-bio"
-    sha256 cellar: :any_skip_relocation, catalina:     "6851604ef61179f22485d7a230de5eaf4025b4b85756d948c10ff96a61a33f9d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "30dc86c27dc8bf5281e9a156aab83931c8401f859a1a4bae10ebd24d066ce67c"
+    root_url "https://ghcr.io/v2/brewsci/bio"
+    sha256 cellar: :any_skip_relocation, catalina:     "7cce83abecd04993bb30ae4b898346b6dd22efd471cd52559d34da61400e6dec"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "df20a7be2f77b47aa2fe2e01dbfb974cba84be92ddbc9b4ec6d18a01594d3e62"
   end
 
   depends_on "autoconf" => :build

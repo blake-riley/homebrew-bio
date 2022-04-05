@@ -1,15 +1,14 @@
 class DshBio < Formula
   desc "Tools for BED, FASTA, FASTQ, GAF, GFA1/2, GFF3, PAF, SAM, and VCF files"
   homepage "https://github.com/heuermh/dishevelled-bio"
-  url "https://search.maven.org/remotecontent?filepath=org/dishevelled/dsh-bio-tools/2.0.2/dsh-bio-tools-2.0.2-bin.tar.gz"
-  sha256 "eada488d7aa863ce187473512f85be9a0ce6a0b50a6ecf66c23c0ee72908747e"
+  url "https://search.maven.org/remotecontent?filepath=org/dishevelled/dsh-bio-tools/2.0.8/dsh-bio-tools-2.0.8-bin.tar.gz"
+  sha256 "916f76fb0667aca55259deaba95df1f6ac132a538eca72358c922ea02562b26c"
   license "LGPL-3.0-or-later"
 
   bottle do
-    root_url "https://archive.org/download/brewsci/bottles-bio"
-    rebuild 1
-    sha256 cellar: :any_skip_relocation, catalina:     "7bcf5fbdca9723385ea257092d4bc5b9d051b2aad315ada4808fcb39d756c93b"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "80a22439485ccfe318db475dd29e0fd7a21f3fc284b3a243c517cc27218411db"
+    root_url "https://ghcr.io/v2/brewsci/bio"
+    sha256 cellar: :any_skip_relocation, catalina:     "3aff2dd93a8e2a49dc2cf79749f2017e01af87c1f141a5b213eade33b90bd756"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "9cdee00ca6ea213a544813a588a4433660f807749e9c164ea2031638b452198b"
   end
 
   depends_on "openjdk"

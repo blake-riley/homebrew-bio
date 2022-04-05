@@ -3,10 +3,10 @@ class BaliPhy < Formula
   # cite Redelings_2014: "https://dx.doi.org/10.1093/molbev/msu174"
   desc "Bayesian co-estimation of phylogenies and multiple alignments"
   homepage "http://www.bali-phy.org/"
-  url "https://github.com/bredelings/BAli-Phy/archive/3.6.0.tar.gz"
-  sha256 "88f1922f80d0376ec2a0929d72d69258eac3dfba0eef13aab3f9c460db1ac0b6"
+  url "https://github.com/bredelings/BAli-Phy/archive/3.6.1.tar.gz"
+  sha256 "6591f39d5708f5c34fca244f20326c6cba30bb32c80b72c6ae2e7e23bafcf11a"
   license "GPL-2.0-or-later"
-  head "https://github.com/bredelings/BAli-Phy.git"
+  head "https://github.com/bredelings/BAli-Phy.git", branch: "master"
 
   livecheck do
     url :stable
@@ -14,9 +14,9 @@ class BaliPhy < Formula
   end
 
   bottle do
-    root_url "https://archive.org/download/brewsci/bottles-bio"
-    sha256 cellar: :any,                 catalina:     "272d54b06c0906e3fe6041c156d6fb748d0f2c27ff1c32d4271543fb302368a6"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "4d1dd23a90021c9a833c0d7a51a454481eb862acfd832e7f53be5eeea5a36f1b"
+    root_url "https://ghcr.io/v2/brewsci/bio"
+    sha256 cellar: :any,                 catalina:     "be42fc5e484110a6ad5379ca889cb213788f647af30c0531945bd48d363c5355"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "fe3b2a4ac7350c0172be7d30f67c7a742d6545c5e266a4ff9cf6290afa0a160d"
   end
 
   depends_on "meson" => :build
