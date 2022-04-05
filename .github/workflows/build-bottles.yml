@@ -25,11 +25,6 @@ jobs:
           cd ~/bottles
           brew test-bot --skip-recursive-dependents --root-url=https://ghcr.io/v2/brewsci/bio --git-name=Brewsci --git-email=linux@brew.sh
           cp -a ~/bottles $RUNNER_TEMP/
-      - name: Upload bottles
-        uses: actions/upload-artifact@v1
-        with:
-          name: bottles
-          path: ${{runner.temp}}/bottles
   build-macos-bottles:
     runs-on: macos-10.15
     env:
@@ -46,8 +41,3 @@ jobs:
           cd ~/bottles
           brew test-bot --cleanup --root-url=https://ghcr.io/v2/brewsci/bio
           cp -a ~/bottles $RUNNER_TEMP/
-      - name: Upload bottles
-        uses: actions/upload-artifact@v1
-        with:
-          name: bottles
-          path: ${{runner.temp}}/bottles
