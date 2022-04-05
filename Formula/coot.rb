@@ -3,18 +3,19 @@ class Coot < Formula
 
   desc "Crystallographic Object-Oriented Toolkit"
   homepage "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/"
-  url "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/source/releases/coot-1.tar.gz"
-  sha256 "abf7c70651c329ce1db69c7a026bb431af419c8861282cce817dd06eeeb3af99"
+  url "https://github.com/pemsley/coot/archive/ff8c399abd621bd8366466b2154d0783855607cd.tar.gz"
+  version "1.0.01-pre"
+  sha256 "f117475c3650fccd01dfcefb47d221d5143a57c18f05def558441cf870de7f79"
   license any_of: ["GPL-3.0-only", "LGPL-3.0-only", "GPL-2.0-or-later"]
 
   head do
     url "https://github.com/pemsley/coot.git", branch: "gtk3"
-    depends_on "autoconf" => :build
-    depends_on "automake" => :build
-    depends_on "libtool" => :build
-    patch :DATA
   end
 
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "libtool" => :build
+  depends_on "pkg-config" => :build
   depends_on "swig" => :build
   depends_on "adwaita-icon-theme" # display icons
   depends_on "boost"
@@ -24,24 +25,16 @@ class Coot < Formula
   depends_on "brewsci/bio/mmdb2"
   depends_on "brewsci/bio/raster3d"
   depends_on "brewsci/bio/ssm"
-  depends_on "gd"
   depends_on "glib"
-  depends_on "glm"
-  depends_on "gmp"
   depends_on "goocanvas"
   depends_on "gsl"
   depends_on "gtk+3"
-  depends_on "gtkglext"
-  depends_on "guile@3"
   depends_on "libepoxy"
-  depends_on "libidn"
   depends_on "numpy"
-  depends_on "pkg-config"
   depends_on "py3cairo"
   depends_on "pygobject3"
   depends_on "python@3.9"
   depends_on "rdkit"
-  depends_on "readline"
 
   uses_from_macos "curl"
 
@@ -55,13 +48,15 @@ class Coot < Formula
     sha256 "03562eec612103a48bd114cfe0d171943e88f94b84610d16d542cda138e5f36b"
   end
 
+  patch :DATA
+
   def install
     ENV.cxx11
     ENV.libcxx
 
     # libtool -> glibtool for macOS
     inreplace "autogen.sh", "libtool", "glibtool"
-    system "./autogen.sh" if build.head?
+    system "./autogen.sh"
 
     # Get Python location
     python_executable = Formula["python@3.9"].opt_bin/"python3"
@@ -91,7 +86,6 @@ class Coot < Formula
       --with-enhanced-ligand-tools
     ]
 
-    # rdkit_libs is defined, but not used now.
     rdkit_libs = %W[
       "-L#{Formula["rdkit"].opt_lib}
       -lRDKitMolDraw2D
@@ -122,10 +116,10 @@ class Coot < Formula
 
     args << "RDKIT_LIBS=#{rdkit_libs.join(" ")}"
     args << "RDKIT_CXXFLAGS=#{rdkit_cxxflags.join(" ")}"
-
+    ENV.append_to_cflags "-fPIC" if OS.linux?
     system "./configure", *args
     system "make"
-    ENV.deparallelize { system "make", "install" }
+    system "make", "install"
 
     # install reference data
     # install data, #{pkgshare} is /path/to/share/coot
