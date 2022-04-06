@@ -64,9 +64,9 @@ class Coot < Formula
     ENV["PYTHONPATH"] = libexec/"lib/python#{xy}/site-packages"
 
     # FFTW2.1.5 location, included in the Clipper4coot Formula
-    fftw2_prefix = Formula["clipper4coot"].opt_prefix/"fftw2"
-    ENV.append "LDFLAGS", "-L#{Formula["clipper4coot"].opt_prefix}/fftw2/lib"
-    ENV.append "CPPFLAGS", "-I#{Formula["clipper4coot"].opt_prefix}/fftw2/include"
+    fftw2_prefix = Formula["brewsci/bio/clipper4coot"].opt_prefix/"fftw2"
+    ENV.append "LDFLAGS", "-L#{Formula["brewsci/bio/clipper4coot"].opt_prefix}/fftw2/lib"
+    ENV.append "CPPFLAGS", "-I#{Formula["brewsci/bio/clipper4coot"].opt_prefix}/fftw2/include"
 
     # Boost root
     boost_prefix = Formula["boost"].opt_prefix
