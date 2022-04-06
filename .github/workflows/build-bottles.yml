@@ -8,23 +8,23 @@ env:
   HOMEBREW_NO_INSTALL_CLEANUP: 1
 
 jobs:
-  build-linux-bottles:
-    runs-on: ubuntu-latest
-    container:
-      image: homebrew/ubuntu16.04:master
-      options: --user root
-    steps:
-      - name: Update Homebrew
-        run: brew update-reset
-      - uses: actions/checkout@master
-      - name: Build bottles
-        run: |
-          mkdir -p "$(dirname $(brew --repo ${{github.repository}}))"
-          cp -a "$GITHUB_WORKSPACE" "$(brew --repo ${{github.repository}})"
-          mkdir ~/bottles
-          cd ~/bottles
-          brew test-bot --skip-recursive-dependents --root-url=https://ghcr.io/v2/brewsci/bio --git-name=Brewsci --git-email=linux@brew.sh
-          cp -a ~/bottles $RUNNER_TEMP/
+  # build-linux-bottles:
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: homebrew/ubuntu16.04:master
+  #     options: --user root
+  #   steps:
+  #     - name: Update Homebrew
+  #       run: brew update-reset
+  #     - uses: actions/checkout@master
+  #     - name: Build bottles
+  #       run: |
+  #         mkdir -p "$(dirname $(brew --repo ${{github.repository}}))"
+  #         cp -a "$GITHUB_WORKSPACE" "$(brew --repo ${{github.repository}})"
+  #         mkdir ~/bottles
+  #         cd ~/bottles
+  #         brew test-bot --skip-recursive-dependents --root-url=https://ghcr.io/v2/brewsci/bio --git-name=Brewsci --git-email=linux@brew.sh
+  #         cp -a ~/bottles $RUNNER_TEMP/
   build-macos-bottles:
     runs-on: macos-10.15
     env:
