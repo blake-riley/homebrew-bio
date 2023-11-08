@@ -36,7 +36,7 @@ class Coot < Formula
   depends_on "libepoxy"
   depends_on "numpy"
   depends_on "py3cairo"
-  depends_on "python@3.10"
+  depends_on "python@3.11"
   depends_on "rdkit"
   depends_on "sqlite"
   depends_on "pygobject3"
@@ -55,7 +55,16 @@ class Coot < Formula
     version "1"
   end
 
+  resource "requests" do
+    url "https://files.pythonhosted.org/packages/9d/be/10918a2eac4ae9f02f6cfe6414b7a155ccd8f7f9d4380d62fd5b955065c3/requests-2.31.0.tar.gz"
+    sha256 "942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1"
+  end
+
   patch :DATA
+
+  def python3
+    which("python3.11")
+  end
 
   def install
     ENV.cxx11
@@ -71,9 +80,9 @@ class Coot < Formula
     end
 
     # Get Python location
-    python_executable = Formula["python@3.9"].opt_bin/"python3"
-    xy = Language::Python.major_minor_version python_executable
-    ENV["PYTHONPATH"] = libexec/"lib/python#{xy}/site-packages"
+    xy = Language::Python.major_minor_version python3
+    resource("requests").stage { system python3, *Language::Python.setup_install_args(libexec/"vendor") }
+    ENV.prepend_path "PYTHONPATH", libexec/"vendor/lib/python#{xy}/site-packages"
 
     # Set Boost, RDKit, and FFTW2 root
     boost_prefix = Formula["boost"].opt_prefix
