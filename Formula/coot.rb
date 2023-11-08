@@ -3,9 +3,10 @@ class Coot < Formula
 
   desc "Crystallographic Object-Oriented Toolkit"
   homepage "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/"
-  url "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/source/releases/coot-1.1.tar.gz"
-  sha256 "374ed919292a5aca43a470b18a21b1ea8c89cb655ec9e8faa641aab91510c87f"
+  url "https://github.com/pemsley/coot/archive/d6d8ed5ea90c4a493c6d6b19ce9ea7833a32963f.tar.gz"
+  sha256 "6dbdb588b14049316075714a1e5ba204e51b602b1f5138fb1ba76072983ed08f"
   license any_of: ["GPL-3.0-only", "LGPL-3.0-only", "GPL-2.0-or-later"]
+  version "1.1.1"
 
   head do
     url "https://github.com/pemsley/coot.git", branch: "main"
@@ -45,11 +46,13 @@ class Coot < Formula
   resource "reference-structures" do
     url "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/dependencies/reference-structures.tar.gz"
     sha256 "44db38506f0f90c097d4855ad81a82a36b49cd1e3ffe7d6ee4728b15109e281a"
+    version "1"
   end
 
   resource "monomers" do
     url "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/dependencies/refmac-monomer-library.tar.gz"
     sha256 "03562eec612103a48bd114cfe0d171943e88f94b84610d16d542cda138e5f36b"
+    version "1"
   end
 
   patch :DATA
