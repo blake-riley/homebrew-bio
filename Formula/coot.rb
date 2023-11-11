@@ -1,10 +1,9 @@
 class Coot < Formula
   include Language::Python::Virtualenv
-
   desc "Crystallographic Object-Oriented Toolkit"
   homepage "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/"
-  url "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/source/releases/coot-1.1.01.tar.gz"
-  sha256 "a725db10883ebdf024e059731c1a53ade2677bf5aa3eb81f9492cfc0952d0e53"
+  url "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/source/releases/coot-1.1.02.tar.gz"
+  sha256 "f6fe555b2292d998a2961c43c361b5129afb263df87645c6c18ab80d571f1c48"
   license any_of: ["GPL-3.0-only", "LGPL-3.0-only", "GPL-2.0-or-later"]
 
   head do
@@ -78,8 +77,8 @@ class Coot < Formula
 
     # Get Python location
     xy = Language::Python.major_minor_version python3
-    resource("requests").stage { system python3, *Language::Python.setup_install_args(libexec/"vendor") }
-    ENV.prepend_path "PYTHONPATH", libexec/"vendor/lib/python#{xy}/site-packages"
+    resource("requests").stage { system python3, *Language::Python.setup_install_args(libexec) }
+    ENV.prepend_path "PYTHONPATH", libexec/"lib/python#{xy}/site-packages"
 
     # Set Boost, RDKit, and FFTW2 root
     boost_prefix = Formula["boost"].opt_prefix
@@ -107,6 +106,8 @@ class Coot < Formula
     # install data, #{pkgshare} is /path/to/share/coot
     (pkgshare/"reference-structures").install resource("reference-structures")
     (pkgshare/"lib/data/monomers").install resource("monomers")
+    # enable python requests
+    (lib/"python#{xy}/site-packages/homebrew-coot.pth").write libexec/"lib/python#{xy}/site-packages"
   end
 
   # test block is not tested now.
