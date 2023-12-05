@@ -34,10 +34,10 @@ class Coot < Formula
   depends_on "libepoxy"
   depends_on "numpy"
   depends_on "py3cairo"
+  depends_on "pygobject3"
   depends_on "python@3.11"
   depends_on "rdkit"
   depends_on "sqlite"
-  depends_on "pygobject3"
 
   uses_from_macos "curl"
 
@@ -100,7 +100,7 @@ class Coot < Formula
     ENV.append_to_cflags "-fPIC" if OS.linux?
     system "./configure", *args
     system "make"
-    ENV.deparallelize { system 'make', 'install' }
+    ENV.deparallelize { system "make", "install" }
 
     # install reference data
     # install data, #{pkgshare} is /path/to/share/coot
